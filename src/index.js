@@ -6,6 +6,8 @@
     let horizontalBias = 0.5, verticalBias = 0.5;
 	let fps = 12;
     let walkerWidth = 5;
+    let paused = false;
+    let drawShape = "square";
     let ctx;
     
     window.onload = function(){
@@ -24,30 +26,63 @@
         createWalker(100, 300, "blue");
         createWalker(500, 100, "red");
 
-        setInterval(drawWalker, 1000 / fps);
+        drawWalkers();
         //setInterval(cls,5000);
 
+        document.querySelector("#playButton").onclick = function(){
+            if(!paused)
+            {
+                return;
+            }
+            paused = false;
+            drawWalkers();
+        }
+        document.querySelector("#pauseButton").onclick = function(){
+            paused = true;
+        }
+        document.querySelector("#clearButton").onclick = cls;
         document.querySelector("#randomWalkerButton").onclick = createRandomWalker;
+        document.querySelector("#clearWalkersButton").onclick = clearAllWalkers;
         document.querySelector("#horizontalBiasSlider").onchange = function(){
             horizontalBias = this.value / 100;
         }
         document.querySelector("#verticalBiasSlider").onchange = function(){
             verticalBias = this.value / 100;
         }
+        document.querySelector("#fpsSlider").onchange = function(){
+            fps = this.value;
+        }
+        document.querySelector("#walkerShapeDropdown").onchange = function(){
+            drawShape = this.value;
+        }
     }
 
 
-    function drawWalker(){
-
+    function drawWalkers()
+    {
+        if(paused)
+        {
+            return;
+        }
+        setTimeout(drawWalkers, 1000 / fps);
         for(let i = 0; i < walkers.length; i++)
         {
             ctx.save();
             ctx.fillStyle = walkers[i].color;
-            ctx.fillRect(walkers[i].x-walkers[i].width/2,walkers[i].y-walkers[i].width/2,walkers[i].width/2,walkers[i].width/2);
+            if(drawShape == "circle")
+            {
+                ctx.beginPath();
+                ctx.arc(walkers[i].x,walkers[i].y,walkers[i].width/2,0,Math.PI*2);
+                ctx.fill();
+                ctx.closePath();
+            }
+            else
+            {
+                ctx.fillRect(walkers[i].x-walkers[i].width/2,walkers[i].y-walkers[i].width/2,walkers[i].width/2,walkers[i].width/2);
+            }
             walkers[i].move();
             ctx.restore();
         }
-
     }
 
     function createWalker(x, y, color)
@@ -75,9 +110,19 @@
         let color = abcLIB.getRandomColor();
         createWalker(x, y, color);
     }
+    
+    function clearAllWalkers()
+    {
+        walkers.length = 0;
+        cls();
+    }
 
     function cls(){
-        ctx.clearRect(0,0,640,480);
+        ctx.save();
+        ctx.fillStyle = "black";
+        ctx.globalAlpha = 1;
+        ctx.fillRect(0,0,canvasWidth,canvasHeight);
+        ctx.restore();
     }
     
     function canvasClicked(e){
