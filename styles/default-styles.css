@@ -1,3 +1,8 @@
+body
+{
+    background-color: #d5edf5;
+}
+
 canvas
 {
     border:1px solid gray;
@@ -12,4 +17,19 @@ section
 #hiddenCanvas
 {
     display: none;
+}
+
+header
+{
+    font-family: "Roboto", sans-serif;
+}
+
+main
+{
+    font-family: "Open Sans", sans-serif;
+}
+
+button, select, input
+{
+    font-size: 16px;
 }

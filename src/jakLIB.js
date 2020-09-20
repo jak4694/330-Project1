@@ -18,6 +18,17 @@
 			return Math.random() > weight;
 		},
         
+        getRandomWalkerComponents(canvasWidth, canvasHeight, walkerWidth)
+        {
+            let components =
+            {
+                x: jakLIB.getRandomInt(0, canvasWidth / walkerWidth) * walkerWidth,
+                y: jakLIB.getRandomInt(0, canvasHeight / walkerWidth) * walkerWidth,
+                color: jakLIB.getRandomColor()
+            }
+            return components;
+        },
+        
         cls(ctx, canvasWidth, canvasHeight){
             ctx.save();
             ctx.fillStyle = "black";
@@ -28,6 +39,38 @@
         
         getColorAtPosition(ctx, x, y, width = 1, height = 1)
         {
+            if(width < 1)
+            {
+                width = 1;
+            }
+            else if(width > ctx.width)
+            {
+                width = ctx.width;
+            }
+            if(height < 1)
+            {
+                height = 1;
+            }
+            else if(height > ctx.height)
+            {
+                height = ctx.height;
+            }
+            if(x < 0)
+            {
+                x = 0;
+            }
+            else if(x > ctx.width - width)
+            {
+                x = ctx.width - width;
+            }
+            if(y < 0)
+            {
+                y = 0;
+            }
+            else if(y > ctx.height - height)
+            {
+                y = ctx.height - height;
+            }
             let colorData = ctx.getImageData(x, y, width, height).data;
             let red = 0;
             let green = 0;

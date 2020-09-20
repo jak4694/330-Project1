@@ -9,6 +9,7 @@
     let paused = false;
     let drawShape = "square";
     let drawColor = "colored";
+    let movementRestrictions = "none";
     let ctx;
     let hiddenCtx;
     
@@ -54,11 +55,26 @@
         document.querySelector("#fpsSlider").onchange = function(){
             fps = this.value;
         }
+        document.querySelector("#movementRestrictionsDropdown").onchange = function(){
+            movementRestrictions = this.value;
+        }
         document.querySelector("#walkerShapeDropdown").onchange = function(){
             drawShape = this.value;
         }
         document.querySelector("#walkerColorDropdown").onchange = function(){
             drawColor = this.value;
+            if(drawColor == "picture")
+            {
+                movementRestrictions = "confined";
+                document.querySelector("#movementRestrictionsDropdown").value = "confined";
+                document.querySelector("#noRestrictions").disabled = true;
+                document.querySelector("#wrapRestrictions").disabled = true;
+            }
+            else
+            {
+                document.querySelector("#noRestrictions").disabled = false;
+                document.querySelector("#wrapRestrictions").disabled = false;
+            }
         }
         document.querySelector("#fileUploadButton").onchange = function(e){
             let img = new Image();
@@ -123,7 +139,10 @@
             }
             else
             {
-                ctx.fillRect(walkers[i].x-walkers[i].width/2,walkers[i].y-walkers[i].width/2,walkers[i].width/2,walkers[i].width/2);
+                ctx.beginPath();
+                ctx.rect(walkers[i].x-walkers[i].width/2,walkers[i].y-walkers[i].width/2,walkers[i].width/2,walkers[i].width/2);
+                ctx.closePath();
+                ctx.fill();
             }
             walkers[i].move();
             ctx.restore();
@@ -140,8 +159,47 @@
             move(){
                 if(jakLIB.flipWeightedCoin()){
                     this.x += jakLIB.flipWeightedCoin(horizontalBias) ? -this.width : this.width;
-                }else{
+                }
+                else{
                     this.y += jakLIB.flipWeightedCoin(verticalBias) ? -this.width : this.width;
+                }
+                if(movementRestrictions == "wrap")
+                {
+                    if(this.x < 0)
+                    {
+                        this.x = canvasWidth - this.x;
+                    }
+                    else if(this.x > canvasWidth)
+                    {
+                        this.x -= canvasWidth;
+                    }
+                    if(this.y < 0)
+                    {
+                        this.y = canvasHeight - this.xy;
+                    }
+                    else if(this.y > canvasHeight)
+                    {
+                        this.y -= canvasHeight;
+                    }
+                }
+                else if(movementRestrictions == "confined")
+                {
+                    if(this.x < walkerWidth)
+                    {
+                        this.x = walkerWidth;
+                    }
+                    else if(this.x > canvasWidth - walkerWidth)
+                    {
+                        this.x = canvasWidth - walkerWidth;
+                    }
+                    if(this.y < walkerWidth)
+                    {
+                        this.y = walkerWidth;
+                    }
+                    else if(this.y > canvasHeight - walkerWidth)
+                    {
+                        this.y = canvasHeight - walkerWidth;
+                    }
                 }
             }
         };
@@ -150,10 +208,8 @@
 
     function createRandomWalker()
     {
-        let x = jakLIB.getRandomInt(0, canvasWidth / walkerWidth) * walkerWidth;
-        let y = jakLIB.getRandomInt(0, canvasHeight / walkerWidth) * walkerWidth;
-        let color = jakLIB.getRandomColor();
-        createWalker(x, y, color);
+        let components = jakLIB.getRandomWalkerComponents(canvasWidth, canvasHeight, walkerWidth);
+        createWalker(components.x, components.y, components.color);
     }
     
     function clearAllWalkers()

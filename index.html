@@ -3,53 +3,69 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Project 1 - Random Walkers</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=OpenSans">
 	<link href="styles/default-styles.css" rel="stylesheet" type="text/css">
     <script src="src/jakLIB.js"></script>
     <script src="src/index.js"></script>
 </head>
 <body>
-    <h1>Random Walkers Sandbox</h1>
-	<canvas width="640" height="480">
-		Get a real browser!
-	</canvas>
-    <canvas id="hiddenCanvas" width="640" height="480">
-        Contains the uploaded image.
-    </canvas>
-    <section><button id="playButton">Play</button> <button id="pauseButton">Pause</button> <button id="clearButton">Clear Screen</button></section>
-    <section>
-        <b>Click the canvas to add a walker at that location!</b>
-    </section>
-    <section>
-        Add a walker at a random location: <button id="randomWalkerButton">Add Random Walker</button>
-    </section>
-    <section>
-        Clear all walkers: <button id="clearWalkersButton">Clear All Walkers</button>
-    </section>
-    <section>
-        Walker Horizontal Bias: <input id="horizontalBiasSlider" type="range" min="0" max="100" value="50" class="slider"><br>
-        Walker Vertical Bias: <input id="verticalBiasSlider" type="range" min="0" max="100" value="50" class="slider">
-    </section>
-    <section>
-        FPS (12 - 60): <input id="fpsSlider" type="range" min="12" max="60" value="12" class="slider">
-    </section>
-    <section>
-        Walker Draw Shape: 
-        <select id="walkerShapeDropdown"> 
-            <option value="square" selected>Square</option>
-            <option value="circle">Circle</option>
-        </select>
-    </section>
-    <section>
-        Walker Color Pattern:
-        <select id="walkerColorDropdown">
-            <option value="colored" selected>Colored</option>
-            <option value="rainbow">Rainbow</option>
-            <option id="pictureOption" value="picture" disabled>Picture</option>
-        </select>
-    </section>
-    <section>
-        <b>To enable the picture color option, add a photo: </b>
-        <input type="file" id="fileUploadButton" name="myFile" accept="image/*">
-    </section>
+    <header>
+        <h1>Random Walkers Sandbox</h1>
+    </header>
+    <main>
+        <canvas width="640" height="480">
+            Get a real browser!
+        </canvas>
+        <canvas id="hiddenCanvas" width="640" height="480">
+            Contains the uploaded image.
+        </canvas>
+        <section>
+            This project explores the random walkers theme and allows for a variety of values to change that will affect how the walkers move.<br>
+            It also allows the user to select an image and select the color pattern "picture" to draw the picture as the walkers move around the screen.
+        </section>
+        <section>
+            <b>Click the canvas to add a walker at that location!</b>
+        </section>
+        <section>Simulation options: <button id="playButton">Play</button> <button id="pauseButton">Pause</button> <button id="clearButton">Clear Screen</button></section>
+        <section>
+            Add/Clear walkers: <button id="randomWalkerButton">Add Random Walker</button> <button id="clearWalkersButton">Clear All Walkers</button>
+        </section>
+        <section>
+            Horizontal Bias: <input id="horizontalBiasSlider" type="range" min="0" max="100" value="50" class="slider"> 
+            Vertical Bias: <input id="verticalBiasSlider" type="range" min="0" max="100" value="50" class="slider">
+        </section>
+        <section>
+            FPS (12 - 60): <input id="fpsSlider" type="range" min="12" max="60" value="12" class="slider">
+        </section>
+        <section>
+            Movement Restrictions:
+            <select id="movementRestrictionsDropdown">
+                <option id="noRestrictions" value="none" selected>None</option>
+                <option id="wrapRestrictions" value="wrap">Wrap</option>
+                <option value="confined">Confined</option>
+            </select>
+        </section>
+        <section>
+            Draw Shape: 
+            <select id="walkerShapeDropdown"> 
+                <option value="square" selected>Square</option>
+                <option value="circle">Circle</option>
+            </select> 
+        </section>
+        <section>
+            Color Pattern:
+            <select id="walkerColorDropdown">
+                <option value="colored" selected>Colored</option>
+                <option value="rainbow">Rainbow</option>
+                <option id="pictureOption" value="picture" disabled>Picture</option>
+            </select>
+        </section>
+        <section>
+            <b>To enable the picture color option, add a photo: </b>
+            <input type="file" id="fileUploadButton" name="myFile" accept="image/*">
+            <br>Note: Movement will be restricted to the confined option while picture color pattern is selected.
+        </section>
+    </main>
 </body>
 </html>
