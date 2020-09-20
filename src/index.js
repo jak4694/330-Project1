@@ -8,9 +8,13 @@
     let walkerWidth = 5;
     let paused = false;
     let drawShape = "square";
+    let drawColor = "colored";
     let ctx;
+    let hiddenCtx;
     
     window.onload = function(){
+        
+        hiddenCtx = document.querySelector("#hiddenCanvas").getContext('2d');
         let canvas = document.querySelector('canvas');
         canvasWidth = canvas.width;
         canvasHeight = canvas.height;
@@ -21,10 +25,6 @@
         ctx.fillStyle = 'black';
 
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-        createWalker(320, 240, "green");
-        createWalker(100, 300, "blue");
-        createWalker(500, 100, "red");
 
         drawWalkers();
         //setInterval(cls,5000);
@@ -40,7 +40,9 @@
         document.querySelector("#pauseButton").onclick = function(){
             paused = true;
         }
-        document.querySelector("#clearButton").onclick = cls;
+        document.querySelector("#clearButton").onclick = function(){
+            jakLIB.cls(ctx, canvasWidth, canvasHeight);
+        }
         document.querySelector("#randomWalkerButton").onclick = createRandomWalker;
         document.querySelector("#clearWalkersButton").onclick = clearAllWalkers;
         document.querySelector("#horizontalBiasSlider").onchange = function(){
@@ -55,8 +57,20 @@
         document.querySelector("#walkerShapeDropdown").onchange = function(){
             drawShape = this.value;
         }
+        document.querySelector("#walkerColorDropdown").onchange = function(){
+            drawColor = this.value;
+        }
+        document.querySelector("#fileUploadButton").onchange = function(e){
+            let img = new Image();
+            img.src = URL.createObjectURL(e.target.files[0]);
+            img.onload = function(){
+                hiddenCtx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                jakLIB.getColorAtPosition(hiddenCtx, 0, 0, canvasWidth, canvasHeight);
+                document.querySelector("#pictureOption").disabled = false;
+            };
+            img.fail = function(){};
+        }
     }
-
 
     function drawWalkers()
     {
@@ -68,7 +82,38 @@
         for(let i = 0; i < walkers.length; i++)
         {
             ctx.save();
-            ctx.fillStyle = walkers[i].color;
+            let color;
+            if(drawColor == "rainbow")
+            {
+                color = jakLIB.getRandomColor();
+            }
+            else if(drawColor == "picture")
+            {
+                let x = walkers[i].x - walkerWidth;
+                if(x < 0)
+                {
+                    x = 0;
+                }
+                else if(x > canvasWidth - (walkerWidth * 2))
+                {
+                    x = canvasWidth - (walkerWidth * 2);
+                }
+                let y = walkers[i].y - walkerWidth;
+                if(y < 0)
+                {
+                    y = 0;
+                }
+                else if(y > canvasHeight - (walkerWidth * 2))
+                {
+                    y = canvasHeight - (walkerWidth * 2);
+                }
+                color = jakLIB.getColorAtPosition(hiddenCtx, x, y, walkerWidth * 2, walkerWidth * 2);
+            }
+            else
+            {
+                color = walkers[i].color;
+            }
+            ctx.fillStyle = color;
             if(drawShape == "circle")
             {
                 ctx.beginPath();
@@ -93,10 +138,10 @@
             color: color,
             width: walkerWidth,
             move(){
-                if(abcLIB.flipWeightedCoin()){
-                    this.x += abcLIB.flipWeightedCoin(horizontalBias) ? -this.width : this.width;
+                if(jakLIB.flipWeightedCoin()){
+                    this.x += jakLIB.flipWeightedCoin(horizontalBias) ? -this.width : this.width;
                 }else{
-                    this.y += abcLIB.flipWeightedCoin(verticalBias) ? -this.width : this.width;
+                    this.y += jakLIB.flipWeightedCoin(verticalBias) ? -this.width : this.width;
                 }
             }
         };
@@ -105,30 +150,21 @@
 
     function createRandomWalker()
     {
-        let x = abcLIB.getRandomInt(0, canvasWidth / walkerWidth) * walkerWidth;
-        let y = abcLIB.getRandomInt(0, canvasHeight / walkerWidth) * walkerWidth;
-        let color = abcLIB.getRandomColor();
+        let x = jakLIB.getRandomInt(0, canvasWidth / walkerWidth) * walkerWidth;
+        let y = jakLIB.getRandomInt(0, canvasHeight / walkerWidth) * walkerWidth;
+        let color = jakLIB.getRandomColor();
         createWalker(x, y, color);
     }
     
     function clearAllWalkers()
     {
         walkers.length = 0;
-        cls();
-    }
-
-    function cls(){
-        ctx.save();
-        ctx.fillStyle = "black";
-        ctx.globalAlpha = 1;
-        ctx.fillRect(0,0,canvasWidth,canvasHeight);
-        ctx.restore();
     }
     
     function canvasClicked(e){
         let rect = e.target.getBoundingClientRect();
         let mouseX = e.clientX - rect.x;
         let mouseY = e.clientY - rect.y;
-        createWalker(mouseX - (mouseX % walkerWidth), mouseY - (mouseY % walkerWidth), abcLIB.getRandomColor());
+        createWalker(mouseX - (mouseX % walkerWidth), mouseY - (mouseY % walkerWidth), jakLIB.getRandomColor());
     }
 })()
