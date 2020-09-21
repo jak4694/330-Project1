@@ -66,6 +66,14 @@
         }
         document.querySelector("#movementRestrictionsDropdown").onchange = function(){
             movementRestrictions = this.value;
+            if(movementRestrictions == "confined")
+            {
+                document.querySelector("#pictureOption").disabled = false;
+            }
+            else
+            {
+                document.querySelector("#pictureOption").disabled = true;
+            }
         }
         document.querySelector("#walkerShapeDropdown").onchange = function(){
             drawShape = this.value;
@@ -74,8 +82,6 @@
             drawColor = this.value;
             if(drawColor == "picture")
             {
-                movementRestrictions = "confined";
-                document.querySelector("#movementRestrictionsDropdown").value = "confined";
                 document.querySelector("#noRestrictions").disabled = true;
                 document.querySelector("#wrapRestrictions").disabled = true;
                 for(let i = 0; i < walkers.length; i++)
@@ -130,6 +136,7 @@
         setTimeout(drawWalkers, 1000 / fps);
         for(let i = 0; i < walkers.length; i++)
         {
+            walkers[i].move();
             ctx.save();
             let color;
             if(drawColor == "rainbow")
@@ -138,25 +145,16 @@
             }
             else if(drawColor == "picture")
             {
-                let x = walkers[i].x - walkerWidth;
-                if(x < 0)
+                let x = walkers[i].x;
+                let y = walkers[i].y;
+                if(x < walkerWidth || x > canvasWidth - walkerWidth || y < walkerWidth || y > canvasHeight - walkerWidth)
                 {
-                    x = 0;
+                    color = jakLIB.getRandomColor();
                 }
-                else if(x > canvasWidth - (walkerWidth * 2))
+                else
                 {
-                    x = canvasWidth - (walkerWidth * 2);
+                    color = jakLIB.getColorAtPosition(hiddenCtx, x, y, walkerWidth * 2, walkerWidth * 2);
                 }
-                let y = walkers[i].y - walkerWidth;
-                if(y < 0)
-                {
-                    y = 0;
-                }
-                else if(y > canvasHeight - (walkerWidth * 2))
-                {
-                    y = canvasHeight - (walkerWidth * 2);
-                }
-                color = jakLIB.getColorAtPosition(hiddenCtx, x, y, walkerWidth * 2, walkerWidth * 2);
             }
             else
             {
@@ -177,7 +175,6 @@
                 ctx.closePath();
                 ctx.fill();
             }
-            walkers[i].move();
             ctx.restore();
         }
     }
