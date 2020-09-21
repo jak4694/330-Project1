@@ -4,12 +4,13 @@
     let walkers = [];
     let canvasWidth, canvasHeight;
     let horizontalBias = 0.5, verticalBias = 0.5;
-	let fps = 12;
+	let fps = 30;
     let walkerWidth = 5;
     let paused = false;
     let drawShape = "square";
-    let drawColor = "colored";
-    let movementRestrictions = "none";
+    let drawColor = "picture";
+    let movementRestrictions = "confined";
+    let startWalkerCount = 20;
     let ctx;
     let hiddenCtx;
     
@@ -23,13 +24,15 @@
 
         ctx = canvas.getContext('2d');
 
+        ctx.save();
         ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.rect(0, 0, canvasWidth, canvasHeight);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
 
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-        drawWalkers();
-        //setInterval(cls,5000);
-
+        hiddenCtx.drawImage(document.querySelector("#starterImage"), 0, 0, canvasWidth, canvasHeight);
         document.querySelector("#playButton").onclick = function(){
             if(!paused)
             {
@@ -52,6 +55,12 @@
         document.querySelector("#verticalBiasSlider").onchange = function(){
             verticalBias = this.value / 100;
         }
+        document.querySelector("#resetBiasButton").onclick = function(){
+            document.querySelector("#horizontalBiasSlider").value = 50;
+            document.querySelector("#verticalBiasSlider").value = 50;
+            horizontalBias = 0.5;
+            verticalBias = 0.5;
+        }
         document.querySelector("#fpsSlider").onchange = function(){
             fps = this.value;
         }
@@ -69,6 +78,25 @@
                 document.querySelector("#movementRestrictionsDropdown").value = "confined";
                 document.querySelector("#noRestrictions").disabled = true;
                 document.querySelector("#wrapRestrictions").disabled = true;
+                for(let i = 0; i < walkers.length; i++)
+                {
+                    if(walkers[i].x < walkerWidth)
+                    {
+                        walkers[i].x = walkerWidth;
+                    }
+                    else if(walkers[i].x > canvasWidth - walkerWidth)
+                    {
+                        walkers[i].x = canvasWidth - walkerWidth;
+                    }
+                    if(walkers[i].y < walkerWidth)
+                    {
+                        walkers[i].y = walkerWidth;
+                    }
+                    else if(walkers[i].y > canvasHeight - walkerWidth)
+                    {
+                        walkers[i].y = canvasHeight - walkerWidth;
+                    }
+                }
             }
             else
             {
@@ -81,11 +109,16 @@
             img.src = URL.createObjectURL(e.target.files[0]);
             img.onload = function(){
                 hiddenCtx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-                jakLIB.getColorAtPosition(hiddenCtx, 0, 0, canvasWidth, canvasHeight);
                 document.querySelector("#pictureOption").disabled = false;
             };
             img.fail = function(){};
         }
+        
+        for(let i = 0; i < startWalkerCount; i++)
+        {
+            createRandomWalker();
+        }
+        drawWalkers();
     }
 
     function drawWalkers()
