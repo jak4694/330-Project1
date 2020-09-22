@@ -21,53 +21,57 @@
             Contains the uploaded image.
         </canvas>
         <img class="hidden" id="starterImage" src="img/helloWorld.png" alt ="Hello World">
-        <section>
+        <section class="section">
+            <h2>Description</h2>
             This project explores the random walkers theme and allows for a variety of values to change that will affect how the walkers move.<br>
             It also allows the user to select an image and select the color pattern "picture" to draw the picture as the walkers move around the screen.<br>
             By default, it will use a "Hello World" picture to draw hello world to the screen using the random walkers.
         </section>
         <section>
-            <b>Click the canvas to add a walker at that location!</b>
-        </section>
-        <section>Simulation options: <button id="playButton">Play</button> <button id="pauseButton">Pause</button> <button id="clearButton">Clear Screen</button></section>
-        <section>
-            Add/Clear walkers: <button id="randomWalkerButton">Add Random Walker</button> <button id="clearWalkersButton">Clear All Walkers</button>
-        </section>
-        <section>
-            Horizontal Bias: <input id="horizontalBiasSlider" type="range" min="0" max="100" value="50" class="slider"> 
-            Vertical Bias: <input id="verticalBiasSlider" type="range" min="0" max="100" value="50" class="slider"> 
-            <button id="resetBiasButton">Reset Biases</button>
-        </section>
-        <section>
-            FPS (12 - 60): <input id="fpsSlider" type="range" min="12" max="60" value="30" class="slider">
-        </section>
-        <section>
-            Movement Restrictions:
-            <select id="movementRestrictionsDropdown">
-                <option id="noRestrictions" value="none" disabled>None</option>
-                <option id="wrapRestrictions" value="wrap" disabled>Wrap</option>
-                <option value="confined" selected>Confined</option>
-            </select>
-        </section>
-        <section>
-            Draw Shape: 
-            <select id="walkerShapeDropdown"> 
-                <option value="square" selected>Square</option>
-                <option value="circle">Circle</option>
-            </select> 
-        </section>
-        <section>
-            Color Pattern:
-            <select id="walkerColorDropdown">
-                <option value="colored">Colored</option>
-                <option value="rainbow">Rainbow</option>
-                <option id="pictureOption" value="picture" selected>Picture</option>
-            </select>
-            <br>Note: Movement must be restricted to the confined option to enable the picture color pattern.
-        </section>
-        <section>
-            <b>Add a custom photo: </b>
-            <input type="file" id="fileUploadButton" name="myFile" accept="image/*">
+            <h2>Controls</h2>
+            <div class="section">
+                <b>Click the canvas to add a walker at that location!</b>
+            </div>
+            <div class="section">Simulation options: <button id="playButton">Play</button> <button id="pauseButton">Pause</button> <button id="clearButton">Clear Screen</button></div>
+            <div class="section">
+                Add/Clear walkers: <button id="randomWalkerButton">Add Random Walker</button> <button id="clearWalkersButton">Clear All Walkers</button>
+            </div>
+            <div class="section">
+                Horizontal Bias: <input id="horizontalBiasSlider" type="range" min="0" max="100" value="50" class="slider"> 
+                Vertical Bias: <input id="verticalBiasSlider" type="range" min="0" max="100" value="50" class="slider"> 
+                <button id="resetBiasButton">Reset Biases</button>
+            </div>
+            <div class="section">
+                FPS (12 - 60): <input id="fpsSlider" type="range" min="12" max="60" value="30" class="slider">
+            </div>
+            <div class="section">
+                Movement Restrictions:
+                <select id="movementRestrictionsDropdown">
+                    <option id="noRestrictions" value="none" disabled>None</option>
+                    <option id="wrapRestrictions" value="wrap" disabled>Wrap</option>
+                    <option value="confined" selected>Confined</option>
+                </select>
+            </div>
+            <div class="section">
+                Draw Shape: 
+                <select id="walkerShapeDropdown"> 
+                    <option value="square" selected>Square</option>
+                    <option value="circle">Circle</option>
+                </select> 
+            </div>
+            <div class="section">
+                Color Pattern:
+                <select id="walkerColorDropdown">
+                    <option value="colored">Colored</option>
+                    <option value="rainbow">Rainbow</option>
+                    <option id="pictureOption" value="picture" selected>Picture</option>
+                </select>
+                <br>Note: Movement must be restricted to the confined option to enable the picture color pattern.
+            </div>
+            <div class="section">
+                <b>Add a custom photo: </b>
+                <input type="file" id="fileUploadButton" name="myFile" accept="image/*">
+            </div>
         </section>
     </main>
 </body>

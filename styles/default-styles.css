@@ -8,10 +8,23 @@ canvas
     border:1px solid gray;
 }
 
-section
+.section
 {
     padding-top: 3px;
     padding-bottom: 3px;
+}
+
+h1
+{
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 1.75em;
+}
+
+h2
+{
+    margin-top: 1px;
+    margin-bottom: 1px;
 }
 
 .hidden
@@ -27,9 +40,10 @@ header
 main
 {
     font-family: "Open Sans", sans-serif;
+    font-size: 15px;
 }
 
 button, select, input
 {
-    font-size: 16px;
+    font-size: 15px;
 }
