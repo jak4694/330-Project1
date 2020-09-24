@@ -136,6 +136,8 @@
         setTimeout(drawWalkers, 1000 / fps);
         for(let i = 0; i < walkers.length; i++)
         {
+            let previousX = walkers[i].x;
+            let previousY = walkers[i].y;
             walkers[i].move();
             ctx.save();
             let color;
@@ -161,12 +163,22 @@
                 color = walkers[i].color;
             }
             ctx.fillStyle = color;
+            ctx.strokeStyle = color;
             if(drawShape == "circle")
             {
                 ctx.beginPath();
                 ctx.arc(walkers[i].x,walkers[i].y,walkers[i].width/2,0,Math.PI*2);
                 ctx.fill();
                 ctx.closePath();
+            }
+            else if(drawShape == "lines")
+            {
+                ctx.lineWidth = walkerWidth;
+                ctx.beginPath();
+                ctx.moveTo(previousX, previousY);
+                ctx.lineTo(walkers[i].x, walkers[i].y);
+                ctx.closePath();
+                ctx.stroke();
             }
             else
             {
